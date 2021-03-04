@@ -71,3 +71,18 @@ div[data-index = '7']{
 }
 div[data-index = '8']{
 }
+
+
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+button{
+    font-size: 30px;
+    padding: 40px 80px;
+    margin: 50px;
+
+}

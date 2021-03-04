@@ -1,132 +1,165 @@
-
-
-// const currentTurn = (function(){
-//     let playerTurn = 0;
-// })();
-
-// const flowOfGame = (function(){
-
-//     if(currentTurn.playerTurn === 1){
-
-
-//     }
-
-//     return {
-//         sayName: function(){
-//             console.log('hihi');
-//         }
-//     }
-
-// })();
-
-// const boardDisplay = (function(){
-//     this.buttons = document.querySelectorAll('.grid-item');
-//     this.storage = [];
-//     buttons.forEach(element => {
-//         element.addEventListener('click', function(){
-//             console.log(element);
-//             let lastClicked = element.getAttribute('data-index');
-//             storage.push(lastClicked);
-//             flowOfGame.sayName();
-//         });
-        
-//     });
-//     return {storage};
-// })(); 
-
-
-
-// let createPlayer = function(name, symbol){
-//     this.name = name;
-//     this.symbol = symbol;
-//     return {name: name, symbol:symbol};
-
-// };
-
-
-// let playerOne = createPlayer('sam','X');
+let currentPlayer = 1; // 1 for player 1 & 2 for player 2
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-// GameFlow
-    // if 0
-        // Player Choice
-                // put choic in array gameboard
-                    // update boared
-
-
-    // if 1
-        // Computer Choice
-                // put choic in array gameboard
-                    // update boared
-
-// Update Board
-
-// Gamebord object array
-
-
+const Players = function(name,marker){
+    this.name = name;
+    this.marker = marker;
+};
 
 const gameBoard = (function(){
-    let gameBoardArray = [];
+    let gameBoardArray = [0,0,0,0,0,0,0,0,0];
     return{
         gameBoardArray,
     }
 })();
 
-
-const updateGameBoard = (function(array){
-    console.log(array);
-
-})(gameBoard.gameBoardArray);
-
-
-
-
-const usersButtons = (function(){
-    let buttons = document.querySelectorAll('.grid-item');
-    buttons.forEach((element)=>{
+const buttons = (function(){
+    let button = document.querySelectorAll('.grid-item');
+    button.forEach((element)=>{
         element.addEventListener('click', function(){
-            console.log(element);
-            playersChoice.sayElement(element);
-
+            userPressedButton.buttonPressed(element);
         });
     });
 
+    function clearButtons(){
+        button.forEach((element)=>{
+            element.innerHTML = "";
+        });
+    };
+
+    return{
+        clearButtons,
+    }
+})();
+
+const restartButton = (function(){
+
+    button = document.querySelector('button').addEventListener('click', function(){
+
+        currentPlayer = 1;
+        restartGame.restartBoard();
+        buttons.clearButtons();
+
+        // if(currentPlayer == 1){
+        //     currentPlayer = 1;
+        // }
+
+        // if(currentPlayer == 2){
+        //     currentPlayer = 2;
+        // }
+    });
+
+})();
+
+const checkBoardForWinner = (function(array){
+    function findAWinner(){
+        if((gameBoard.gameBoardArray[0] == 1 &&  gameBoard.gameBoardArray[1] == 1 && gameBoard.gameBoardArray[2] == 1) ||
+           (gameBoard.gameBoardArray[3] == 1 &&  gameBoard.gameBoardArray[4] == 1 && gameBoard.gameBoardArray[5] == 1)||
+           (gameBoard.gameBoardArray[6] == 1 &&  gameBoard.gameBoardArray[7] == 1 && gameBoard.gameBoardArray[8] == 1)||
+           (gameBoard.gameBoardArray[0] == 1 &&  gameBoard.gameBoardArray[3] == 1 && gameBoard.gameBoardArray[6] == 1)||
+           (gameBoard.gameBoardArray[1] == 1 &&  gameBoard.gameBoardArray[4] == 1 && gameBoard.gameBoardArray[7] == 1)||
+           (gameBoard.gameBoardArray[2] == 1 &&  gameBoard.gameBoardArray[5] == 1 && gameBoard.gameBoardArray[8] == 1)||
+           (gameBoard.gameBoardArray[0] == 1 &&  gameBoard.gameBoardArray[4] == 1 && gameBoard.gameBoardArray[8] == 1)||
+           (gameBoard.gameBoardArray[2] == 1 &&  gameBoard.gameBoardArray[4] == 1 && gameBoard.gameBoardArray[6] == 1)){
+                alert('Player 1 Won!');
+                return;
+        }
+                
+        if((gameBoard.gameBoardArray[0] == 2 &&  gameBoard.gameBoardArray[1] == 2 && gameBoard.gameBoardArray[2] == 2) ||
+            (gameBoard.gameBoardArray[3] == 2 &&  gameBoard.gameBoardArray[4] == 2 && gameBoard.gameBoardArray[5] == 2)||
+            (gameBoard.gameBoardArray[6] == 2 &&  gameBoard.gameBoardArray[7] == 2 && gameBoard.gameBoardArray[8] == 2)||
+            (gameBoard.gameBoardArray[0] == 2 &&  gameBoard.gameBoardArray[3] == 2 && gameBoard.gameBoardArray[6] == 2)||
+            (gameBoard.gameBoardArray[1] == 2 &&  gameBoard.gameBoardArray[4] == 2 && gameBoard.gameBoardArray[7] == 2)||
+            (gameBoard.gameBoardArray[2] == 2 &&  gameBoard.gameBoardArray[5] == 2 && gameBoard.gameBoardArray[8] == 2)||
+            (gameBoard.gameBoardArray[0] == 2 &&  gameBoard.gameBoardArray[4] == 2 && gameBoard.gameBoardArray[8] == 2)||
+            (gameBoard.gameBoardArray[2] == 2 &&  gameBoard.gameBoardArray[4] == 2 && gameBoard.gameBoardArray[6] == 2)){
+            alert('Plaer 2 Won!');
+            return;
+        }
+    }
+    return{
+        findAWinner,
+    }
+})(gameBoard.gameBoardArray);
+
+const updateGameBoard = (function(array){
+    function updateBlocks(element){
+        if(currentPlayer === 1){
+            element.innerHTML="X";
+        }else if(currentPlayer === 2){
+            element.innerHTML ='O';
+        }
+    }
+
+    return{
+        updateBlocks,
+    }
+})(gameBoard.gameBoardArray);
+
+
+const userPressedButton = (function(){
+    function buttonPressed(element){
+        playersChoice.pushPlayerChoice(element);
+    }
+    return{
+        buttonPressed,
+    }
 })();
 
 
 const playersChoice = (function(){
     let playersCurrentChoice;
-    function sayElement(element){
+    function pushPlayerChoice(element){
         playersCurrentChoice = element.getAttribute('data-index');
-        console.log(playersCurrentChoice);
-        gameBoard.gameBoardArray.push(playersCurrentChoice);
 
+
+        if(gameBoard.gameBoardArray[playersCurrentChoice] == 1 || gameBoard.gameBoardArray[playersCurrentChoice] == 2){
+            return;
+        }else{
+            if(currentPlayer == 1){
+                gameBoard.gameBoardArray[playersCurrentChoice] = currentPlayer;
+                updateGameBoard.updateBlocks(element);
+                setTimeout(()=>checkBoardForWinner.findAWinner(), 100);
+                currentPlayer = 2;
+
+                return;
+            }else if(currentPlayer == 2){
+                gameBoard.gameBoardArray[playersCurrentChoice] = currentPlayer;
+                updateGameBoard.updateBlocks(element);
+                setTimeout(()=>checkBoardForWinner.findAWinner(), 100);
+                currentPlayer = 1;
+
+                return;
+            }
+        }
     }
 
 
     return {
-        sayElement,
-        
+        pushPlayerChoice, 
     }
-
-
-
 })();
 
 
+
+
+const restartGame = (function(){
+
+
+
+    function restartBoard(){
+        gameBoard.gameBoardArray = [0,0,0,0,0,0,0,0,0];
+
+
+    }
+    return{
+        restartBoard,
+    }
+    
+
+})()
 
 
 
